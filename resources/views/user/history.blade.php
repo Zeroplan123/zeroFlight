@@ -29,6 +29,7 @@
                                 <th class="py-3 px-4">Rute</th>
                                 <th class="py-3 px-4">Jadwal</th>
                                 <th class="py-3 px-4 text-right">Kursi</th>
+                                <th class="py-3 px-4">Penumpang</th>
                                 <th class="py-3 px-4 text-right">Total</th>
                                 <th class="py-3 px-4">Metode</th>
                                 <th class="py-3 px-4">Status</th>
@@ -47,6 +48,26 @@
                                         {{ optional(optional($booking->schedule)->departure_time)->format('d M Y H:i') ?? '-' }}
                                     </td>
                                     <td class="py-3 px-4 whitespace-nowrap text-right">{{ $booking->total_seats }}</td>
+                                    <td class="py-3 px-4">
+                                        @php
+                                            $passengerNames = $booking->passengers;
+                                            if (is_string($passengerNames)) {
+                                                $decoded = json_decode($passengerNames, true);
+                                                $passengerNames = is_array($decoded) ? $decoded : [];
+                                            }
+                                            $passengerNames = is_array($passengerNames) ? array_values(array_filter($passengerNames)) : [];
+                                        @endphp
+
+                                        @if (count($passengerNames) > 0)
+                                            <div class="space-y-0.5 text-sm text-gray-700">
+                                                @foreach ($passengerNames as $name)
+                                                    <div class="whitespace-nowrap">{{ $name }}</div>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <span class="text-gray-400">-</span>
+                                        @endif
+                                    </td>
                                     <td class="py-3 px-4 whitespace-nowrap text-right font-medium text-gray-900">
                                         Rp {{ number_format($booking->total_price, 0, ',', '.') }}
                                     </td>
@@ -72,6 +93,13 @@
                                                     class="h-14 w-14 rounded-md border border-gray-200 bg-white object-contain"
                                                     loading="lazy" />
                                             </a>
+                                        @elseif ($booking->status === 'pending')
+                                            <form action="{{ route('user.payments.create', $booking) }}" method="GET">
+                                                <button type="submit"
+                                                    class="inline-flex items-center rounded-md border border-gray-900 bg-white px-3 py-1.5 text-xs font-semibold text-gray-900 shadow-sm hover:bg-gray-900 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2">
+                                                    Upload Bukti
+                                                </button>
+                                            </form>
                                         @else
                                             -
                                         @endif
@@ -79,7 +107,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="8" class="py-10 text-center text-gray-500">
+                                    <td colspan="9" class="py-10 text-center text-gray-500">
                                         Belum ada booking.
                                     </td>
                                 </tr>

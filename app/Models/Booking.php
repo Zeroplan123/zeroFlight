@@ -11,9 +11,14 @@ class Booking extends Model
         'schedule_id',
         'total_seats',
         'total_price',
+        'passengers',
         'images',
         'payment_method',
         'status',
+    ];
+
+    protected $casts = [
+        'passengers' => 'array',
     ];
 
     public function user()
@@ -26,4 +31,3 @@ class Booking extends Model
         return $this->belongsTo(Schedule::class);
     }
 }
-

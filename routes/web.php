@@ -70,6 +70,10 @@ Route::get('/admin', function () {
 Route::middleware(['auth', 'role:user'])->name('user.')->group(function () {
     Route::get('/schedules/{schedule}/book', [UserBookingController::class, 'create'])->name('bookings.create');
     Route::post('/schedules/{schedule}/book', [UserBookingController::class, 'store'])->name('bookings.store');
+    Route::get('/schedules/{schedule}/book/payment', [UserBookingController::class, 'wizardPaymentCreate'])->name('bookings.payment');
+    Route::post('/schedules/{schedule}/book/payment', [UserBookingController::class, 'wizardPaymentStore'])->name('bookings.payment.store');
+    Route::get('/bookings/{booking}/payment', [UserBookingController::class, 'paymentCreate'])->name('payments.create');
+    Route::post('/bookings/{booking}/payment', [UserBookingController::class, 'paymentStore'])->name('payments.store');
     Route::get('/history', [UserBookingController::class, 'index'])->name('history');
 });
 

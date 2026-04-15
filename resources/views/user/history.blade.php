@@ -54,13 +54,13 @@
                                     <td class="py-3 px-4 whitespace-nowrap">
                                         @php
                                             $statusColor = match ($booking->status) {
-                                                'confirmed' => 'text-green-800 bg-green-50 border-green-200',
-                                                'cancelled' => 'text-red-800 bg-red-50 border-red-200',
-                                                default => 'text-gray-800 bg-gray-100 border-gray-200',
+                                                'confirmed' => 'text-green-900',
+                                                'cancelled' => 'text-red-800 ',
+                                                default => 'text-gray-800 ',
                                             };
                                         @endphp
                                         <span
-                                            class="inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-semibold {{ $statusColor }}">
+                                            class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold {{ $statusColor }}">
                                             {{ ucfirst($booking->status) }}
                                         </span>
                                     </td>
